@@ -1,13 +1,16 @@
 // ==UserScript==
-// @name         Download Kindle Books
-// @namespace    http://tampermonkey.net/
-// @version      0.1
-// @description  try to take over the world!
-// @author       You
-// @match        https://www.amazon.com/hz/mycd/digital-console/contentlist/booksAll/dateDsc/
-// @icon         https://www.google.com/s2/favicons?sz=64&domain=amazon.com
-// @grant        none
-// @require      https://code.jquery.com/jquery-3.6.1.min.js
+// @name            Download Kindle Books
+// @namespace       https://github.com/husjon/tampermonkey
+// @version         0.2
+// @description     Helper script for backing up a users Kindle Books
+// @author          @husjon
+// @updateURL       https://github.com/husjon/tampermonkey/raw/main/kindle_download_books.js
+// @downloadURL     https://github.com/husjon/tampermonkey/raw/main/kindle_download_books.js
+// @supportURL      https://github.com/husjon/tampermonkey/issues
+// @match           https://www.amazon.com/hz/mycd/digital-console/contentlist/booksAll/dateDsc/
+// @icon            https://www.google.com/s2/favicons?sz=64&domain=amazon.com
+// @grant           none
+// @require         https://code.jquery.com/jquery-3.6.1.min.js
 // ==/UserScript==
 /* globals jQuery, $ */
 
