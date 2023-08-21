@@ -1,77 +1,129 @@
 // ==UserScript==
 // @name            Download Kindle Books
 // @namespace       https://github.com/husjon/tampermonkey
-// @version         0.2
+// @version         0.3
 // @description     Helper script for backing up a users Kindle Books
 // @author          @husjon
 // @updateURL       https://github.com/husjon/tampermonkey/raw/main/kindle_download_books.js
 // @downloadURL     https://github.com/husjon/tampermonkey/raw/main/kindle_download_books.js
 // @supportURL      https://github.com/husjon/tampermonkey/issues
-// @match           https://www.amazon.com/hz/mycd/digital-console/contentlist/booksAll/dateDsc/
+// @match           https://www.amazon.com/hz/mycd/digital-console/contentlist/booksAll/dateDsc/*
 // @icon            https://www.google.com/s2/favicons?sz=64&domain=amazon.com
 // @grant           none
-// @require         https://code.jquery.com/jquery-3.6.1.min.js
 // ==/UserScript==
 /* globals jQuery, $ */
 
-(function() {
-    'use strict';
+(function () {
+  "use strict";
 
-    setTimeout(function () {
-        let global_log_level = 'info'
-        let selected_books = []
+  const global_log_level = "info";
 
-        function log(message, level='info') {
-            if (level == global_log_level) {
-                console.log(message)
-            }
-        }
-        const sleep = ms => new Promise(r => setTimeout(r, ms));
+  let startup_interval = null;
+  let selected_books = [];
 
-        async function download(asin) {
-            const checkbox = `#download_and_transfer_list_${asin}_0`
-            const confirm = `#DOWNLOAD_AND_TRANSFER_ACTION_${asin}_CONFIRM > span`
+  const button = document.createElement("div");
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-            log(`Clicking Checkbox: ${checkbox}`, 'debug')
-            $(checkbox).click();
-            await sleep(100);
-            log(`Clicking Confirm:  ${confirm}`, 'debug')
-            $(confirm).click();
-            await sleep(1000);
-            $('#notification-close').click()
-        }
+  function log(message, level = "info") {
+    if (level == global_log_level) {
+      console.log(message);
+    }
+  }
 
-        function add_download_button() {
-            let button_style = { 'display': 'flex', 'border-radius': '3px', 'margin-bottom': '10px', 'min-height': '1.8rem', 'border-width': '1px', 'border-style': 'solid', 'border-color': 'rgb(173, 177, 184) rgb(162, 166, 172) rgb(141, 144, 150)', 'border-image': 'initial', 'cursor': 'pointer', 'background': 'linear-gradient(rgb(247, 248, 250), rgb(231, 233, 236))', 'word-break': 'break-word', 'outline': 'none', 'text-align': 'center', 'align-items': 'center', 'justify-content': 'center', 'width': '8rem', 'opacity': '0.25' }
+  function startup() {
+    startup_interval = setInterval(() => {
+      document.querySelector("#CONTENT_LIST") && started();
+    }, 100);
+  }
 
-            let buttons_container = '#FLOATING_TASK_BAR > div.filter-container > div'
+  function started() {
+    log("Initialized", "info");
+    clearInterval(startup_interval); // Stops the startup check
 
-            $(buttons_container).append('<div style="padding-right: 0.8rem;"></div>')
-            $(buttons_container).append('<div id="DOWNLOAD"><div style="font-size: 13px;"><span>Download Selected</span></div></div>')
-            $('#DOWNLOAD').css(button_style).on('click', async function(){
-                for (const asin of selected_books) {
-                    await download(asin)
-                }
-            })
-        }
+    add_download_button();
+    update_event_listeners();
+  }
 
-        $(':checkbox').on('change', function() {
-            selected_books = []
-            for (const checkbox of $(':checkbox:checked')) {
-                if (checkbox.id.includes(':KindleEBook')) {
-                    let asin = checkbox.id.replace(':KindleEBook', '')
-                    selected_books.push(asin)
-                }
-            }
-            if (selected_books.length > 0) {
-                $('#DOWNLOAD').css({'opacity': 1})
-            }
-            else {
-                $('#DOWNLOAD').css({'opacity': 0.25})
-            }
-        })
+  function add_download_button() {
+    log("Adding download button", "debug");
+    let buttons_container =
+      "#FLOATING_TASK_BAR > div.filter-container > div.content-filter-item";
+    let button_style =
+      document.querySelector("#SELECT-ALL").style.cssText + "font-size: 13px;";
 
-        add_download_button()
-    }, 1000);
+    button.className = "action_button";
+    button.id = "DOWNLOAD";
+    button.innerText = "Download Selected";
+    button.style.cssText = button_style;
+    button.style.width = "auto";
+    button.style.padding = "0px 5px";
+    button.style.opacity = selected_books.length > 0 ? 1.0 : 0.25;
+    button.addEventListener("click", download_books);
 
+    const button_spacer = document.createElement("div");
+    button_spacer.style.paddingRight = "0.8rem";
+
+    document.querySelector(buttons_container).append(button_spacer);
+    document.querySelector(buttons_container).append(button);
+    log("Added download button", "debug");
+  }
+
+  function update_event_listeners() {
+    log("Updating event listeners", "debug");
+    let all_checkboxes = [
+      ...document.querySelectorAll("[type=checkbox]"),
+    ].filter((checkbox) => checkbox.id.includes("KindleEBook"));
+
+    all_checkboxes.map((element) => {
+      element.removeEventListener("change", update_download_list);
+      element.addEventListener("change", update_download_list);
+    });
+
+    document.querySelectorAll("#pagination .page-item").forEach((button) => {
+      button.addEventListener("click", startup);
+    });
+
+    log("Updated event listeners", "debug");
+  }
+
+  function update_download_list(event) {
+    const asin = event.target.id.replace(":KindleEBook", "");
+
+    if (event.target.checked) {
+      selected_books.push(asin);
+    } else {
+      selected_books = selected_books.filter((item) => {
+        return item !== asin;
+      });
+    }
+
+    button.style.opacity = selected_books.length > 0 ? 1.0 : 0.25;
+  }
+
+  async function download_books() {
+    log(`Downloading: ${selected_books.join(", ")}`, "info");
+    for (const asin of selected_books) {
+      await download(asin);
+    }
+  }
+  async function download(asin) {
+    const checkbox = document.querySelector(
+      `#download_and_transfer_list_${asin}_0`
+    );
+    const kindle_label = checkbox.parentElement.parentElement.parentElement;
+
+    log(`Clicking Checkbox for ${kindle_label}`, "debug", "debug");
+    document.querySelector(`#download_and_transfer_list_${asin}_0`).click();
+    await sleep(100);
+
+    log(`Clicking Confirm:  ${confirm}`, "debug");
+    document
+      .querySelector(`#DOWNLOAD_AND_TRANSFER_ACTION_${asin}_CONFIRM > span`)
+      .click();
+    await sleep(1000);
+
+    document.querySelector(`#notification-close`).click();
+  }
+
+  startup();
 })();
