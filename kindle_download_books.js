@@ -120,9 +120,17 @@
     document
       .querySelector(`#DOWNLOAD_AND_TRANSFER_ACTION_${asin}_CONFIRM > span`)
       .click();
-    await sleep(1000);
 
-    document.querySelector(`#notification-close`).click();
+    for (let i = 0; i < 10; i++) {
+      await sleep(1000);
+
+      let notification_close = document.querySelector(`#notification-close`);
+      if (notification_close) {
+        notification_close.click();
+        await sleep(2000);
+        return
+      }
+    }
   }
 
   startup();
