@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name            Download Kindle Books
 // @namespace       https://github.com/husjon/tampermonkey
-// @version         0.3.1
+// @version         0.3.2
 // @description     Helper script for backing up a users Kindle Books
 // @author          @husjon
 // @updateURL       https://github.com/husjon/tampermonkey/raw/main/kindle_download_books.js
@@ -120,9 +120,17 @@
     document
       .querySelector(`#DOWNLOAD_AND_TRANSFER_ACTION_${asin}_CONFIRM > span`)
       .click();
-    await sleep(1000);
 
-    document.querySelector(`#notification-close`).click();
+    for (let i = 0; i < 10; i++) {
+      await sleep(1000);
+
+      let notification_close = document.querySelector(`#notification-close`);
+      if (notification_close) {
+        notification_close.click();
+        await sleep(2000);
+        return
+      }
+    }
   }
 
   startup();
