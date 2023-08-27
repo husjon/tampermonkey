@@ -1,12 +1,12 @@
 // ==UserScript==
 // @name            Download Kindle Books
 // @namespace       https://github.com/husjon/tampermonkey
-// @version         0.3.2
+// @version         0.3.3
 // @description     Helper script for backing up a users Kindle Books
 // @author          @husjon
 // @updateURL       https://github.com/husjon/tampermonkey/raw/main/kindle_download_books.js
 // @downloadURL     https://github.com/husjon/tampermonkey/raw/main/kindle_download_books.js
-// @supportURL      https://github.com/husjon/tampermonkey/issues/new?title=Kindle%20Download%20-%20
+// @supportURL      https://github.com/husjon/tampermonkey/issues/new?title=Kindle%20Download%20v0.3.3%20-%20
 // @match           https://www.amazon.com/hz/mycd/digital-console/contentlist/booksAll/dateDsc/*
 // @icon            https://www.google.com/s2/favicons?sz=64&domain=amazon.com
 // @grant           none
