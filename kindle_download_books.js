@@ -79,6 +79,11 @@
       element.addEventListener("change", update_download_list);
     });
 
+    let search_button = document.querySelector("#search-button > div");
+    search_button.removeEventListener('click', startup)
+    search_button.addEventListener('click', startup)
+
+
     document.querySelectorAll("#pagination .page-item").forEach((button) => {
       button.addEventListener("click", startup);
     });
