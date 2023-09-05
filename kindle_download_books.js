@@ -7,7 +7,7 @@
 // @updateURL       https://github.com/husjon/tampermonkey/raw/main/kindle_download_books.js
 // @downloadURL     https://github.com/husjon/tampermonkey/raw/main/kindle_download_books.js
 // @supportURL      https://github.com/husjon/tampermonkey/issues/new?title=Kindle%20Download%20v0.3.3%20-%20
-// @match           https://www.amazon.com/hz/mycd/digital-console/contentlist/booksAll/dateDsc/*
+// @match           https://www.amazon.com/hz/mycd/digital-console/contentlist/booksAll/*
 // @icon            https://www.google.com/s2/favicons?sz=64&domain=amazon.com
 // @grant           none
 // ==/UserScript==
