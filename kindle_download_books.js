@@ -80,9 +80,8 @@
     });
 
     let search_button = document.querySelector("#search-button > div");
-    search_button.removeEventListener('click', startup)
-    search_button.addEventListener('click', startup)
-
+    search_button.removeEventListener("click", startup);
+    search_button.addEventListener("click", startup);
 
     document.querySelectorAll("#pagination .page-item").forEach((button) => {
       button.addEventListener("click", startup);
@@ -113,7 +112,7 @@
   }
   async function download(asin) {
     const checkbox = document.querySelector(
-      `#download_and_transfer_list_${asin}_0`
+      `#download_and_transfer_list_${asin}_0`,
     );
     const kindle_label = checkbox.parentElement.parentElement.parentElement;
 
@@ -133,7 +132,7 @@
       if (notification_close) {
         notification_close.click();
         await sleep(2000);
-        return
+        return;
       }
     }
   }
