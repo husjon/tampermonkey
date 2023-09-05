@@ -22,6 +22,7 @@
   let button_style = null;
 
   const download_button = document.createElement("div");
+  const remove_expired_button = document.createElement("div");
   let selected_books = [];
 
   function waitForElement(selector) {
@@ -73,6 +74,8 @@
     }
 
     download_button.style.opacity = selected_books.length > 0 ? 1.0 : 0.25;
+    remove_expired_button.style.opacity =
+      selected_books.length > 0 ? 1.0 : 0.25;
   }
 
   function update_event_listeners() {
@@ -96,6 +99,9 @@
     console.log("Updated event listeners");
   }
 
+  function remove_expired_books() {
+    throw new Error("Not Implemented");
+  }
   async function download_books() {
     console.log(`Downloading: ${selected_books.join(", ")}`);
     for (const asin of selected_books) {
@@ -126,6 +132,13 @@
         "DOWNLOAD",
         "Download Selected",
         download_books,
+      );
+      // Add `Remove Expired` button
+      add_button(
+        remove_expired_button,
+        "REMOVE_EXPIRED_BOOKS",
+        "Removed Expired",
+        remove_expired_books,
       );
 
       // Add Event Listeners for pagination buttons and checkboxes
