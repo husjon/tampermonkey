@@ -1,0 +1,7 @@
+{
+  "name": "tampermonkey_collection",
+  "version": "0.0.1",
+  "devDependencies": {
+    "prettier": "^3.0.3"
+  }
+}
