@@ -103,6 +103,11 @@
     for (const asin of selected_books) {
       await remove_expired_book(asin);
     }
+
+    let original_button_text = remove_expired_button.innerText;
+    remove_expired_button.innerText = "Done!";
+    await sleep(3000);
+    remove_expired_button.innerText = original_button_text;
   }
 
   async function remove_expired_book(asin) {
