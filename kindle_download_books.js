@@ -108,7 +108,7 @@
   async function remove_expired_book(asin) {
     console.log(`Checking for expiry: ${asin}`);
 
-    let title = `content-title-${asin}`;
+    let title = $(`content-title-${asin}`);
     let rows = title.parentElement.querySelectorAll(".information_row span");
     if (
       rows[0].innerText === "This book was a Kindle digital library loan" &&
