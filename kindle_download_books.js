@@ -102,6 +102,7 @@
   function remove_expired_books() {
     throw new Error("Not Implemented");
   }
+
   async function download_books() {
     console.log(`Downloading: ${selected_books.join(", ")}`);
     for (const asin of selected_books) {
@@ -110,6 +111,7 @@
       await sleep(1500); // Delay needed to let the previous download to start.
     }
   }
+
   async function download(asin) {
     $(`#download_and_transfer_list_${asin}_0`).click();
     await waitForElement(
@@ -145,5 +147,6 @@
       update_event_listeners();
     });
   }
+
   initialize();
 })();
