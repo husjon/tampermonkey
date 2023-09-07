@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name            Download Kindle Books
 // @namespace       https://github.com/husjon/tampermonkey
-// @version         0.3.3
+// @version         0.3.3-issue-7
 // @description     Helper script for backing up a users Kindle Books
 // @author          @husjon
 // @updateURL       https://github.com/husjon/tampermonkey/raw/main/kindle_download_books.js
@@ -99,8 +99,24 @@
     console.log("Updated event listeners");
   }
 
-  function remove_expired_books() {
-    throw new Error("Not Implemented");
+  async function remove_expired_books() {
+    for (const asin of selected_books) {
+      await remove_expired_book(asin);
+    }
+  }
+
+  async function remove_expired_book(asin) {
+    let title = `content-title-${asin}`;
+    let rows = title.parentElement.querySelectorAll(".information_row span");
+    if (
+      rows[0].innerText === "This book was a Kindle digital library loan" &&
+      rows[1].innerText === "Expired on"
+    ) {
+      console.log(`Removed expired book: ${asin}`);
+      await sleep(1500);
+    }
+
+    return;
   }
 
   async function download_books() {
