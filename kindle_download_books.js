@@ -119,6 +119,10 @@
       rows[0].innerText === "This book was a Kindle digital library loan" &&
       rows[1].innerText === "Expired on"
     ) {
+      document
+        .querySelector(`#RETURN_CONTENT_ACTION_${asin}_CONFIRM > span`)
+        .click();
+
       console.log(`Removed expired book: ${asin}`);
       await sleep(1500);
     }
