@@ -132,16 +132,13 @@
     ) as NodeListOf<HTMLElement>;
     if (!ROWS) throw new Error(`No info rows found for ASIN: ${asin}`);
 
-    const ROW_1 = ROWS.item(0) as HTMLElement;
-    const ROW_2 = ROWS.item(1) as HTMLElement;
-
     const RETURN_BOOK_BUTTON = $(
       `#RETURN_CONTENT_ACTION_${asin}_CONFIRM > span`,
     ) as HTMLElement;
 
     if (
-      ROW_1.innerText === "This book was a Kindle digital library loan" &&
-      ROW_2.innerText === "Expired on"
+      ROWS[0].innerText === "This book was a Kindle digital library loan" &&
+      ROWS[1].innerText === "Expired on"
     ) {
       RETURN_BOOK_BUTTON.click();
     }
