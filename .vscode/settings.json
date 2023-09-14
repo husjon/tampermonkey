@@ -4,6 +4,6 @@
   "editor.tabSize": 2,
 
   "terminal.integrated.env.linux": {
-    "PATH": "node_modules/.bin: ${env:PATH}"
+    "PATH": "node_modules/.bin:${env:PATH}"
   }
 }
