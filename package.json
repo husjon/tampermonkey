@@ -1,7 +1,11 @@
 {
   "name": "tampermonkey_collection",
   "version": "0.0.1",
+  "scripts": {
+    "dev": "tsc -w"
+  },
   "devDependencies": {
-    "prettier": "^3.0.3"
+    "prettier": "^3.0.3",
+    "typescript": "^5.2.2"
   }
 }
