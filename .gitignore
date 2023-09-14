@@ -1,0 +1,5 @@
+.vscode/
+
+dev/*.js
+extras/
+node_modules/
