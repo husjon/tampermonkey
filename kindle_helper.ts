@@ -127,7 +127,9 @@
     const TITLE = $(`#content-title-${asin}`);
     if (!TITLE) throw new Error(`No title found with ASIN: ${asin}`);
 
-    const ROWS = TITLE.parentElement?.querySelectorAll(".information_row span");
+    const ROWS = TITLE.parentElement?.querySelectorAll(
+      ".information_row span",
+    ) as NodeListOf<HTMLElement>;
     if (!ROWS) throw new Error(`No info rows found for ASIN: ${asin}`);
 
     const ROW_1 = ROWS.item(0) as HTMLElement;
