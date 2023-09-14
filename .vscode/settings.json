@@ -1,0 +1,9 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.tabSize": 2,
+
+  "terminal.integrated.env.linux": {
+    "PATH": "node_modules/.bin: ${env:PATH}"
+  }
+}
