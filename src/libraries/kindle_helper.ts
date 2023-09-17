@@ -144,6 +144,8 @@ const returnBook = async (asin: string) => {
   const BUTTON = $(`RETURN_CONTENT_ACTION_${asin}_CONFIRM`) as HTMLElement;
 
   if (isLibraryBook(asin)) BUTTON?.click();
+
+  await sleep(1500);
 };
 
 async function KindleHelper() {
