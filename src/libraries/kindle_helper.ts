@@ -159,10 +159,18 @@ async function KindleHelper() {
     returnBook,
   };
 
-  log("loading");
-  return new Promise((resolve) => {
-    waitForElement("#CONTENT_LIST").then(() => {
-      log("loaded");
+  return new Promise(async (resolve) => {
+    log("Initializing");
+
+    await sleep(200);
+    await waitForElement("#CONTENT_LIST").then(() => {
+      updateEventListeners();
+
+      for (const button of buttons) {
+        addButton(button.baseButton, button.id, button.label, button.listener);
+      }
+
+      log("Initialized");
       resolve(KINDLE_HELPER);
     });
   });
