@@ -1,5 +1,14 @@
 "use strict";
 
+interface Button {
+  id: string;
+  baseButton: HTMLElement;
+  label: string;
+  listener: Function;
+}
+
+let buttons: Button[] = [];
+
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
