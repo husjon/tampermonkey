@@ -104,6 +104,11 @@ const downloadBook = async (asin: string) => {
   await sleep(1500);
 };
 
+const deleteBook = async (asin: string) => {
+  const BUTTON = $(`DELETE_TITLE_ACTION_${asin}`) as HTMLElement;
+  BUTTON?.click();
+};
+
 const removeExpiredBook = async (asin: string) => {
   const RETURN_BOOK_BUTTON = $(
     `#RETURN_CONTENT_ACTION_${asin}_CONFIRM > span`,
@@ -122,6 +127,7 @@ async function KindleHelper() {
     getSelectedBooks,
     isLibraryBook,
     isExpiredLibraryBook,
+    deleteBook,
     downloadBook,
     removeExpiredBook,
   };
