@@ -32,27 +32,30 @@ const log = (message: string) => {
 };
 
 const addButton = async (
-  base_button: HTMLElement,
+  baseButton: HTMLElement,
   id: string,
-  text: string,
+  label: string,
   listener: any,
 ) => {
   waitForElement("#SELECT-ALL").then((e) => {
-    base_button.className = "action_button";
-    base_button.id = id;
-    base_button.innerText = text;
-    base_button.style.cssText = e.style.cssText + "font-size: 13px;";
+    baseButton.className = "action_button";
+    baseButton.id = id;
+    baseButton.innerText = label;
+    baseButton.style.cssText = e.style.cssText + "font-size: 13px;";
 
-    base_button.style.width = "auto";
-    base_button.style.padding = "0px 5px";
-    base_button.style.opacity = getSelectedBooks().length > 0 ? "1.0" : "0.25";
-    base_button.style.marginLeft = "0.8rem";
+    baseButton.style.width = "auto";
+    baseButton.style.padding = "0px 5px";
+    baseButton.style.opacity = getSelectedBooks().length > 0 ? "1.0" : "0.25";
+    baseButton.style.marginLeft = "0.8rem";
 
-    base_button.addEventListener("click", listener);
+    baseButton.addEventListener("click", listener);
 
     $(
       "#FLOATING_TASK_BAR > div.filter-container > div.content-filter-item",
-    )?.append(base_button);
+    )?.append(baseButton);
+
+    if (!buttons.find((button) => button.id === id))
+      buttons.push({ id, baseButton, label, listener });
   });
 };
 
