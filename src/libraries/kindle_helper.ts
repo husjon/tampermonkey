@@ -132,12 +132,12 @@ const downloadBook = async (asin: string) => {
 const deleteBook = async (asin: string) => {
   const BUTTON = $(`DELETE_TITLE_ACTION_${asin}`) as HTMLElement;
   BUTTON?.click();
+
+  await sleep(1500);
 };
 
 const removeExpiredBook = async (asin: string) => {
   if (isLibraryBook(asin) && isExpiredLibraryBook(asin)) deleteBook(asin);
-
-  await sleep(1500);
 };
 
 const returnBook = async (asin: string) => {
