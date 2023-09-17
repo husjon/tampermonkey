@@ -95,8 +95,9 @@ const isExpiredLibraryBook = (asin: string) => {
 };
 
 const downloadBook = async (asin: string) => {
-  const kindleDevice = $(`#download_and_transfer_list_${asin}_0`);
-  if (!kindleDevice) return;
+  await waitForElement(`#download_and_transfer_list_${asin}_0`).then((obj) =>
+    obj.click(),
+  );
 
   await waitForElement(
     `#DOWNLOAD_AND_TRANSFER_ACTION_${asin}_CONFIRM > span`,
