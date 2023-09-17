@@ -40,6 +40,18 @@ const log = (message: string) => {
   if (loggingEnabled) console.log(`Kindle Helper - ${message}`);
 };
 
+const updateEventListeners = () => {
+  const searchButton = $("#search-button > div");
+  if (searchButton) {
+    searchButton.removeEventListener("click", KindleHelper);
+    searchButton.addEventListener("click", KindleHelper);
+  }
+
+  $$("#pagination .page-item").forEach((button) => {
+    button.addEventListener("click", KindleHelper);
+  });
+};
+
 const addButton = async (
   baseButton: HTMLElement,
   id: string,
