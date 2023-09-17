@@ -110,12 +110,7 @@ const deleteBook = async (asin: string) => {
 };
 
 const removeExpiredBook = async (asin: string) => {
-  const RETURN_BOOK_BUTTON = $(
-    `#RETURN_CONTENT_ACTION_${asin}_CONFIRM > span`,
-  ) as HTMLElement;
-
-  if (isLibraryBook(asin) && isExpiredLibraryBook(asin))
-    RETURN_BOOK_BUTTON.click();
+  if (isLibraryBook(asin) && isExpiredLibraryBook(asin)) deleteBook(asin);
 
   await sleep(1500);
 };
