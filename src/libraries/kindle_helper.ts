@@ -67,6 +67,14 @@ const updateButtons = () => {
   });
 };
 
+/**
+ * Adds a button to the Button Bar.
+ *
+ * @param baseButton The base button to use (created with `document.createElement`)
+ * @param id         The CSS id for the button
+ * @param label      The label of the button
+ * @param listener   The function that should be called when the button is pressed.
+ */
 const addButton = async (
   baseButton: HTMLElement,
   id: string,
@@ -121,6 +129,10 @@ const getBookInformationRows = (asin: string) => {
   ) as NodeListOf<HTMLElement>;
 };
 
+/**
+ *
+ * @param asin Checks if the book with specified ASIN is from a library. (f.ex B003PPDIC4)
+ */
 const isLibraryBook = (asin: string) => {
   for (const row of getBookInformationRows(asin)) {
     if (row.innerText.match(/This book (was|is) a Kindle digital library loan/))
@@ -128,6 +140,11 @@ const isLibraryBook = (asin: string) => {
   }
   return false;
 };
+
+/**
+ *
+ * @param asin Checks if the loan period of the book with specified ASIN has expired. (f.ex B07DTLQJPK)
+ */
 const isExpiredLibraryBook = (asin: string) => {
   for (const row of getBookInformationRows(asin)) {
     if (row.innerText.match(/Expired on/)) return true;
@@ -135,6 +152,10 @@ const isExpiredLibraryBook = (asin: string) => {
   return false;
 };
 
+/**
+ *
+ * @param asin Downloads a book based on the specified ASIN (f.ex B01MYZ8X5C)
+ */
 const downloadBook = async (asin: string) => {
   await waitForElement(`#download_and_transfer_list_${asin}_0`).then((obj) =>
     obj.click(),
@@ -149,6 +170,10 @@ const downloadBook = async (asin: string) => {
   await sleep(1500);
 };
 
+/**
+ *
+ * @param asin Deletes a book based on the specified ASIN (f.ex B0727TNBTY)
+ */
 const deleteBook = async (asin: string) => {
   const BUTTON = $(`DELETE_TITLE_ACTION_${asin}`) as HTMLElement;
   BUTTON?.click();
@@ -156,10 +181,18 @@ const deleteBook = async (asin: string) => {
   await sleep(1500);
 };
 
+/**
+ *
+ * @param asin Returns a book based on the specified ASIN (f.ex B002RI9KAE)
+ */
 const removeExpiredBook = async (asin: string) => {
   if (isLibraryBook(asin) && isExpiredLibraryBook(asin)) deleteBook(asin);
 };
 
+/**
+ *
+ * @param asin Returns a book based on the ASIN (f.ex B00Y7RWXHU)
+ */
 const returnBook = async (asin: string) => {
   const BUTTON = $(`RETURN_CONTENT_ACTION_${asin}_CONFIRM`) as HTMLElement;
 
@@ -168,6 +201,15 @@ const returnBook = async (asin: string) => {
   await sleep(1500);
 };
 
+/**
+ * Instantiates the Kindle Helper
+ *
+ * Example:
+ * ```javascript
+ * KindleHelper.then((KH) => { console.log(KH.isLibraryBook('B003PPDIC4')); })
+ * ```
+ * @returns Promise with helper functions
+ */
 async function KindleHelper() {
   const KINDLE_HELPER = {
     addButton,
