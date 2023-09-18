@@ -108,11 +108,13 @@ const isLibraryBook = (asin: string) => {
     if (row.innerText.match(/This book (was|is) a Kindle digital library loan/))
       return true;
   }
+  return false;
 };
 const isExpiredLibraryBook = (asin: string) => {
   for (const row of getBookInformationRows(asin)) {
     if (row.innerText.match(/Expired on/)) return true;
   }
+  return false;
 };
 
 const downloadBook = async (asin: string) => {
