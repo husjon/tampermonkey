@@ -114,8 +114,16 @@ const getCheckboxes = () =>
 const getAsinFromCheckbox = (checkbox: HTMLInputElement) =>
   checkbox.id.replace(":KindleEBook", "");
 
+/**
+ * Gets all visible books.
+ * @returns string[]: An array containing ASINs
+ */
 const getAllBooks = () => getCheckboxes().map((c) => getAsinFromCheckbox(c));
 
+/**
+ * Gets only the selected books.
+ * @returns string[]: An array containing ASINs
+ */
 const getSelectedBooks = () =>
   getCheckboxes()
     .filter((c) => c.checked)
@@ -130,8 +138,8 @@ const getBookInformationRows = (asin: string) => {
 };
 
 /**
- *
- * @param asin Checks if the book with specified ASIN is from a library. (f.ex B003PPDIC4)
+ * Checks if the book with specified ASIN is from a library. (f.ex B003PPDIC4)
+ * @param asin
  */
 const isLibraryBook = (asin: string) => {
   for (const row of getBookInformationRows(asin)) {
@@ -142,8 +150,8 @@ const isLibraryBook = (asin: string) => {
 };
 
 /**
- *
- * @param asin Checks if the loan period of the book with specified ASIN has expired. (f.ex B07DTLQJPK)
+ * Checks if the loan period of the book with specified ASIN has expired. (f.ex B07DTLQJPK)
+ * @param asin
  */
 const isExpiredLibraryBook = (asin: string) => {
   for (const row of getBookInformationRows(asin)) {
@@ -153,8 +161,8 @@ const isExpiredLibraryBook = (asin: string) => {
 };
 
 /**
- *
- * @param asin Downloads a book based on the specified ASIN (f.ex B01MYZ8X5C)
+ * Downloads a book based on the specified ASIN (f.ex B01MYZ8X5C)
+ * @param asin
  */
 const downloadBook = async (asin: string) => {
   await waitForElement(`#download_and_transfer_list_${asin}_0`).then((obj) =>
@@ -171,8 +179,8 @@ const downloadBook = async (asin: string) => {
 };
 
 /**
- *
- * @param asin Deletes a book based on the specified ASIN (f.ex B0727TNBTY)
+ * Deletes a book based on the specified ASIN (f.ex B0727TNBTY)
+ * @param asin
  */
 const deleteBook = async (asin: string) => {
   const BUTTON = $(`DELETE_TITLE_ACTION_${asin}`) as HTMLElement;
@@ -182,16 +190,16 @@ const deleteBook = async (asin: string) => {
 };
 
 /**
- *
- * @param asin Returns a book based on the specified ASIN (f.ex B002RI9KAE)
+ * Returns a book based on the specified ASIN (f.ex B002RI9KAE)
+ * @param asin
  */
 const removeExpiredBook = async (asin: string) => {
   if (isLibraryBook(asin) && isExpiredLibraryBook(asin)) deleteBook(asin);
 };
 
 /**
- *
- * @param asin Returns a book based on the ASIN (f.ex B00Y7RWXHU)
+ * Returns a book based on the ASIN (f.ex B00Y7RWXHU)
+ * @param asin
  */
 const returnBook = async (asin: string) => {
   const BUTTON = $(`RETURN_CONTENT_ACTION_${asin}_CONFIRM`) as HTMLElement;
