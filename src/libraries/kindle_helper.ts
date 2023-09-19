@@ -214,7 +214,9 @@ const returnBook = async (asin: string) => {
  *
  * Example:
  * ```javascript
- * KindleHelper.then((KH) => { console.log(KH.isLibraryBook('B003PPDIC4')); })
+ * KindleHelper.then((KH) => {
+ *   await KH.downloadBook('B003PPDIC4');
+ * });
  * ```
  * @returns Promise with helper functions
  */
