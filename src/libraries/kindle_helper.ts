@@ -1,5 +1,7 @@
 "use strict";
 
+const VERSION = "0.1.0";
+
 interface Button {
   id: string;
   baseButton: HTMLElement;
@@ -38,7 +40,7 @@ const waitForElement = (selector: string): Promise<HTMLElement> => {
 
 let loggingEnabled = true;
 const log = (message: string) => {
-  if (loggingEnabled) console.log(`Kindle Helper - ${message}`);
+  if (loggingEnabled) console.log(`Kindle Helper v${VERSION}- ${message}`);
 };
 
 const updateEventListeners = () => {
