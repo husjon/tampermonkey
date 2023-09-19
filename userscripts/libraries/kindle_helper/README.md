@@ -30,11 +30,27 @@
 </dd>
 <dt><a href="#KindleHelper">KindleHelper()</a> ⇒</dt>
 <dd><p>Instantiates the Kindle Helper</p>
-<p>Example:</p>
-<pre><code class="language-javascript">// Instantiates the helper
-KindleHelper().then(async (KH) =&gt; {
-    await KH.downloadBook(&#39;B003PPDIC4&#39;);  // Downloads a book
-})
+<p>Example usage in f.ex Tampermonkey:</p>
+<pre><code class="language-javascript">... SNIP ...
+
+// @match           https://www.amazon.com/hz/mycd/digital-console/contentlist/booksAll/dateDsc/*
+// @require         https://github.com/husjon/tampermonkey/blob/main/userscripts/libraries/kindle_helper/kindle_helper.js
+// ==/UserScript==
+
+(async function () {
+    KindleHelper().then(async (KH) =&gt; { // Instantiates the helper
+
+        async function downloadBooks() { // Example callback function
+            for (const book of KH.getSelectedBooks()) {
+                await KH.downloadBook(book);
+            }
+        }
+
+        let download_button = document.createElement(&#39;div&#39;); // Define a button
+        KH.addButton(download_button, &quot;DOWNLOAD&quot;, &quot;Download&quot;, downloadBooks);
+        //            ^ base_button     ^ id        ^ label    ^ function reference
+    });
+})();
 </code></pre>
 </dd>
 </dl>
@@ -138,12 +154,28 @@ Returns a book based on the ASIN (f.ex B00Y7RWXHU)
 ## KindleHelper() ⇒
 Instantiates the Kindle Helper
 
-Example:
+Example usage in f.ex Tampermonkey:
 ```javascript
-// Instantiates the helper
-KindleHelper().then(async (KH) => {
-    await KH.downloadBook('B003PPDIC4');  // Downloads a book
-})
+... SNIP ...
+
+// @match           https://www.amazon.com/hz/mycd/digital-console/contentlist/booksAll/dateDsc/*
+// @require         https://github.com/husjon/tampermonkey/blob/main/userscripts/libraries/kindle_helper/kindle_helper.js
+// ==/UserScript==
+
+(async function () {
+    KindleHelper().then(async (KH) => { // Instantiates the helper
+
+        async function downloadBooks() { // Example callback function
+            for (const book of KH.getSelectedBooks()) {
+                await KH.downloadBook(book);
+            }
+        }
+
+        let download_button = document.createElement('div'); // Define a button
+        KH.addButton(download_button, "DOWNLOAD", "Download", downloadBooks);
+        //            ^ base_button     ^ id        ^ label    ^ function reference
+    });
+})();
 ```
 
 **Kind**: global function  
