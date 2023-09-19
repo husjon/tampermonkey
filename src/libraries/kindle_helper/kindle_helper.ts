@@ -230,17 +230,15 @@ const returnBook = async (asin: string) => {
  * // ==/UserScript==
  *
  * (async function () {
- *     KindleHelper().then(async (KH) => { // Instantiates the helper
+ *   KindleHelper().then((KH) => {
+ *     async function downloadBooks() {
+ *       for (const book of KH.getSelectedBooks()) {
+ *         await KH.downloadBook(book);
+ *       }
+ *     }
  *
- *         async function downloadBooks() { // Example callback function
- *             for (const book of KH.getSelectedBooks()) {
- *                 await KH.downloadBook(book);
- *             }
- *         }
- *
- *         let download_button = KH.addButton("DOWNLOAD", "Download", downloadBooks);
- *         //                                  ^ id        ^ label    ^ function reference
- *     });
+ *     KH.addButton("DOWNLOAD", "Download", downloadBooks);
+ *   });
  * })();
  * ```
  * @returns Promise with helper functions
