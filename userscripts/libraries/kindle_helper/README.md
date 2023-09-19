@@ -1,7 +1,7 @@
 ## Functions
 
 <dl>
-<dt><a href="#addButton">addButton(baseButton, id, label, listener)</a></dt>
+<dt><a href="#addButton">addButton(id, label, listener, followSelection)</a> ⇒</dt>
 <dd><p>Adds a button to the Button Bar.</p>
 </dd>
 <dt><a href="#getAllBooks">getAllBooks()</a> ⇒</dt>
@@ -46,9 +46,8 @@
             }
         }
 
-        let download_button = document.createElement(&#39;div&#39;); // Define a button
-        KH.addButton(download_button, &quot;DOWNLOAD&quot;, &quot;Download&quot;, downloadBooks);
-        //            ^ base_button     ^ id        ^ label    ^ function reference
+        let download_button = KH.addButton(&quot;DOWNLOAD&quot;, &quot;Download&quot;, downloadBooks);
+        //                                  ^ id        ^ label    ^ function reference
     });
 })();
 </code></pre>
@@ -57,17 +56,18 @@
 
 <a name="addButton"></a>
 
-## addButton(baseButton, id, label, listener)
+## addButton(id, label, listener, followSelection) ⇒
 Adds a button to the Button Bar.
 
 **Kind**: global function  
+**Returns**: The button element  
 
-| Param | Description |
-| --- | --- |
-| baseButton | The base button to use (created with `document.createElement`) |
-| id | The CSS id for the button |
-| label | The label of the button |
-| listener | The function that should be called when the button is pressed. |
+| Param | Default | Description |
+| --- | --- | --- |
+| id |  | The CSS id for the button |
+| label |  | The label of the button |
+| listener |  | The function that should be called when the button is pressed |
+| followSelection | <code>true</code> | Override in case the btton should always be available |
 
 <a name="getAllBooks"></a>
 
@@ -171,9 +171,8 @@ Example usage in f.ex Tampermonkey:
             }
         }
 
-        let download_button = document.createElement('div'); // Define a button
-        KH.addButton(download_button, "DOWNLOAD", "Download", downloadBooks);
-        //            ^ base_button     ^ id        ^ label    ^ function reference
+        let download_button = KH.addButton("DOWNLOAD", "Download", downloadBooks);
+        //                                  ^ id        ^ label    ^ function reference
     });
 })();
 ```

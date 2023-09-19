@@ -52,13 +52,15 @@ const updateButtons = () => {
 /**
  * Adds a button to the Button Bar.
  *
- * @param baseButton The base button to use (created with `document.createElement`)
- * @param id         The CSS id for the button
- * @param label      The label of the button
- * @param listener   The function that should be called when the button is pressed.
+ * @param id              The CSS id for the button
+ * @param label           The label of the button
+ * @param listener        The function that should be called when the button is pressed
+ * @param followSelection Override in case the btton should always be available
+ * @returns               The button element
  */
-const addButton = async (baseButton, id, label, listener, followSelection = true) => {
+const addButton = async (id, label, listener, followSelection = true) => {
     waitForElement("#SELECT-ALL").then((e) => {
+        const baseButton = document.createElement("div");
         baseButton.className = "action_button";
         baseButton.id = id;
         baseButton.innerText = label;
@@ -71,8 +73,12 @@ const addButton = async (baseButton, id, label, listener, followSelection = true
         baseButton.style.marginLeft = "0.8rem";
         baseButton.addEventListener("click", listener);
         $("#FLOATING_TASK_BAR > div.filter-container > div.content-filter-item")?.append(baseButton);
-        if (!buttons.find((button) => button.id === id))
+        if (!buttons.find((button) => button.id === id)) {
             buttons.push({ id, baseButton, label, listener, followSelection });
+        }
+        return new Promise((resolve) => {
+            return resolve(baseButton);
+        });
     });
 };
 const getCheckboxes = () => [...$$("[type=checkbox]")].filter((checkbox) => checkbox.id.includes("KindleEBook"));
@@ -172,9 +178,8 @@ const returnBook = async (asin) => {
  *             }
  *         }
  *
- *         let download_button = document.createElement('div'); // Define a button
- *         KH.addButton(download_button, "DOWNLOAD", "Download", downloadBooks);
- *         //            ^ base_button     ^ id        ^ label    ^ function reference
+ *         let download_button = KH.addButton("DOWNLOAD", "Download", downloadBooks);
+ *         //                                  ^ id        ^ label    ^ function reference
  *     });
  * })();
  * ```
@@ -198,7 +203,7 @@ async function KindleHelper() {
         await waitForElement("#CONTENT_LIST").then(() => {
             updateEventListeners();
             for (const button of buttons) {
-                addButton(button.baseButton, button.id, button.label, button.listener);
+                addButton(button.id, button.label, button.listener);
             }
             log("Initialized");
             resolve(KINDLE_HELPER);
