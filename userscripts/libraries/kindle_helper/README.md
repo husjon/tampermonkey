@@ -1,0 +1,150 @@
+## Functions
+
+<dl>
+<dt><a href="#addButton">addButton(baseButton, id, label, listener)</a></dt>
+<dd><p>Adds a button to the Button Bar.</p>
+</dd>
+<dt><a href="#getAllBooks">getAllBooks()</a> ⇒</dt>
+<dd><p>Gets all visible books.</p>
+</dd>
+<dt><a href="#getSelectedBooks">getSelectedBooks()</a> ⇒</dt>
+<dd><p>Gets only the selected books.</p>
+</dd>
+<dt><a href="#isLibraryBook">isLibraryBook(asin)</a></dt>
+<dd><p>Checks if the book with specified ASIN is from a library. (f.ex B003PPDIC4)</p>
+</dd>
+<dt><a href="#isExpiredLibraryBook">isExpiredLibraryBook(asin)</a></dt>
+<dd><p>Checks if the loan period of the book with specified ASIN has expired. (f.ex B07DTLQJPK)</p>
+</dd>
+<dt><a href="#downloadBook">downloadBook(asin)</a></dt>
+<dd><p>Downloads a book based on the specified ASIN (f.ex B01MYZ8X5C)</p>
+</dd>
+<dt><a href="#deleteBook">deleteBook(asin)</a></dt>
+<dd><p>Deletes a book based on the specified ASIN (f.ex B0727TNBTY)</p>
+</dd>
+<dt><a href="#removeExpiredBook">removeExpiredBook(asin)</a></dt>
+<dd><p>Returns a book based on the specified ASIN (f.ex B002RI9KAE)</p>
+</dd>
+<dt><a href="#returnBook">returnBook(asin)</a></dt>
+<dd><p>Returns a book based on the ASIN (f.ex B00Y7RWXHU)</p>
+</dd>
+<dt><a href="#KindleHelper">KindleHelper()</a> ⇒</dt>
+<dd><p>Instantiates the Kindle Helper</p>
+<p>Example:</p>
+<pre><code class="language-javascript">// Instantiates the helper
+KindleHelper().then(async (KH) =&gt; {
+    await KH.downloadBook(&#39;B003PPDIC4&#39;);  // Downloads a book
+})
+</code></pre>
+</dd>
+</dl>
+
+<a name="addButton"></a>
+
+## addButton(baseButton, id, label, listener)
+Adds a button to the Button Bar.
+
+**Kind**: global function  
+
+| Param | Description |
+| --- | --- |
+| baseButton | The base button to use (created with `document.createElement`) |
+| id | The CSS id for the button |
+| label | The label of the button |
+| listener | The function that should be called when the button is pressed. |
+
+<a name="getAllBooks"></a>
+
+## getAllBooks() ⇒
+Gets all visible books.
+
+**Kind**: global function  
+**Returns**: string[]: An array containing ASINs  
+<a name="getSelectedBooks"></a>
+
+## getSelectedBooks() ⇒
+Gets only the selected books.
+
+**Kind**: global function  
+**Returns**: string[]: An array containing ASINs  
+<a name="isLibraryBook"></a>
+
+## isLibraryBook(asin)
+Checks if the book with specified ASIN is from a library. (f.ex B003PPDIC4)
+
+**Kind**: global function  
+
+| Param |
+| --- |
+| asin | 
+
+<a name="isExpiredLibraryBook"></a>
+
+## isExpiredLibraryBook(asin)
+Checks if the loan period of the book with specified ASIN has expired. (f.ex B07DTLQJPK)
+
+**Kind**: global function  
+
+| Param |
+| --- |
+| asin | 
+
+<a name="downloadBook"></a>
+
+## downloadBook(asin)
+Downloads a book based on the specified ASIN (f.ex B01MYZ8X5C)
+
+**Kind**: global function  
+
+| Param |
+| --- |
+| asin | 
+
+<a name="deleteBook"></a>
+
+## deleteBook(asin)
+Deletes a book based on the specified ASIN (f.ex B0727TNBTY)
+
+**Kind**: global function  
+
+| Param |
+| --- |
+| asin | 
+
+<a name="removeExpiredBook"></a>
+
+## removeExpiredBook(asin)
+Returns a book based on the specified ASIN (f.ex B002RI9KAE)
+
+**Kind**: global function  
+
+| Param |
+| --- |
+| asin | 
+
+<a name="returnBook"></a>
+
+## returnBook(asin)
+Returns a book based on the ASIN (f.ex B00Y7RWXHU)
+
+**Kind**: global function  
+
+| Param |
+| --- |
+| asin | 
+
+<a name="KindleHelper"></a>
+
+## KindleHelper() ⇒
+Instantiates the Kindle Helper
+
+Example:
+```javascript
+// Instantiates the helper
+KindleHelper().then(async (KH) => {
+    await KH.downloadBook('B003PPDIC4');  // Downloads a book
+})
+```
+
+**Kind**: global function  
+**Returns**: Promise with helper functions  
