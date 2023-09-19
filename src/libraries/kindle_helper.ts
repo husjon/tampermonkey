@@ -5,6 +5,7 @@ interface Button {
   baseButton: HTMLElement;
   label: string;
   listener: Function;
+  followSelection: boolean;
 }
 
 let buttons: Button[] = [];
@@ -47,8 +48,22 @@ const updateEventListeners = () => {
     searchButton.addEventListener("click", KindleHelper);
   }
 
+  getCheckboxes().map((checkbox) => {
+    checkbox.removeEventListener("click", updateButtons);
+    checkbox.addEventListener("click", updateButtons);
+  });
+
   $$("#pagination .page-item").forEach((button) => {
     button.addEventListener("click", KindleHelper);
+  });
+};
+
+const updateButtons = () => {
+  buttons.map((button) => {
+    if (button.followSelection) {
+      button.baseButton.style.opacity =
+        getSelectedBooks().length > 0 ? "1.0" : "0.25";
+    }
   });
 };
 
@@ -57,6 +72,7 @@ const addButton = async (
   id: string,
   label: string,
   listener: any,
+  followSelection: boolean = true,
 ) => {
   waitForElement("#SELECT-ALL").then((e) => {
     baseButton.className = "action_button";
@@ -66,7 +82,9 @@ const addButton = async (
 
     baseButton.style.width = "auto";
     baseButton.style.padding = "0px 5px";
-    baseButton.style.opacity = getSelectedBooks().length > 0 ? "1.0" : "0.25";
+    if (followSelection) {
+      baseButton.style.opacity = getSelectedBooks().length > 0 ? "1.0" : "0.25";
+    }
     baseButton.style.marginLeft = "0.8rem";
 
     baseButton.addEventListener("click", listener);
@@ -76,7 +94,7 @@ const addButton = async (
     )?.append(baseButton);
 
     if (!buttons.find((button) => button.id === id))
-      buttons.push({ id, baseButton, label, listener });
+      buttons.push({ id, baseButton, label, listener, followSelection });
   });
 };
 
