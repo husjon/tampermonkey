@@ -30,25 +30,6 @@
 </dd>
 <dt><a href="#KindleHelper">KindleHelper()</a> ⇒</dt>
 <dd><p>Instantiates the Kindle Helper</p>
-<p>Example usage in f.ex Tampermonkey:</p>
-<pre><code class="language-javascript">... SNIP ...
-
-// @match           https://www.amazon.com/hz/mycd/digital-console/contentlist/booksAll/dateDsc/*
-// @require         https://github.com/husjon/tampermonkey/blob/main/userscripts/libraries/kindle_helper/kindle_helper.js
-// ==/UserScript==
-
-(async function () {
-  KindleHelper().then((KH) =&gt; {
-    async function downloadBooks() {
-      for (const book of KH.getSelectedBooks()) {
-        await KH.downloadBook(book);
-      }
-    }
-
-    KH.addButton(&quot;DOWNLOAD&quot;, &quot;Download&quot;, downloadBooks);
-  });
-})();
-</code></pre>
 </dd>
 </dl>
 
@@ -151,27 +132,6 @@ Returns a book based on the ASIN (f.ex B00Y7RWXHU)
 
 ## KindleHelper() ⇒
 Instantiates the Kindle Helper
-
-Example usage in f.ex Tampermonkey:
-```javascript
-... SNIP ...
-
-// @match           https://www.amazon.com/hz/mycd/digital-console/contentlist/booksAll/dateDsc/*
-// @require         https://github.com/husjon/tampermonkey/blob/main/userscripts/libraries/kindle_helper/kindle_helper.js
-// ==/UserScript==
-
-(async function () {
-  KindleHelper().then((KH) => {
-    async function downloadBooks() {
-      for (const book of KH.getSelectedBooks()) {
-        await KH.downloadBook(book);
-      }
-    }
-
-    KH.addButton("DOWNLOAD", "Download", downloadBooks);
-  });
-})();
-```
 
 **Kind**: global function  
 **Returns**: Promise with helper functions  

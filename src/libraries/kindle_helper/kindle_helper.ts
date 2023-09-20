@@ -220,27 +220,6 @@ const returnBook = async (asin: string) => {
 
 /**
  * Instantiates the Kindle Helper
- *
- * Example usage in f.ex Tampermonkey:
- * ```javascript
- * ... SNIP ...
- *
- * // @match           https://www.amazon.com/hz/mycd/digital-console/contentlist/booksAll/dateDsc/*
- * // @require         https://github.com/husjon/tampermonkey/blob/main/userscripts/libraries/kindle_helper/kindle_helper.js
- * // ==/UserScript==
- *
- * (async function () {
- *   KindleHelper().then((KH) => {
- *     async function downloadBooks() {
- *       for (const book of KH.getSelectedBooks()) {
- *         await KH.downloadBook(book);
- *       }
- *     }
- *
- *     KH.addButton("DOWNLOAD", "Download", downloadBooks);
- *   });
- * })();
- * ```
  * @returns Promise with helper functions
  */
 async function KindleHelper() {
