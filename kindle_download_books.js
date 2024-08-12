@@ -16,6 +16,8 @@
 (function () {
   "use strict";
 
+  // Index for the device the content will be downloaded for
+  const device_index = 0;
   const global_log_level = "info";
 
   let startup_interval = null;
@@ -113,12 +115,12 @@
   }
   async function download(asin) {
     const checkbox = document.querySelector(
-      `#download_and_transfer_list_${asin}_0`
+      `#download_and_transfer_list_${asin}_${device_index}`
     );
     const kindle_label = checkbox.parentElement.parentElement.parentElement;
 
     log(`Clicking Checkbox for ${kindle_label}`, "debug", "debug");
-    document.querySelector(`#download_and_transfer_list_${asin}_0`).click();
+    document.querySelector(`#download_and_transfer_list_${asin}_${device_index}`).click();
     await sleep(100);
 
     log(`Clicking Confirm:  ${confirm}`, "debug");
