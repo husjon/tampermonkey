@@ -9,21 +9,19 @@
 // @supportURL      https://github.com/husjon/tampermonkey/issues/new?title=Kindle%20Download%20v0.3.3%20-%20
 // @match           https://www.amazon.com/hz/mycd/digital-console/contentlist/booksAll/dateDsc/*
 // @icon            https://www.google.com/s2/favicons?sz=64&domain=amazon.com
-// @grant           none
+// @grant           GM_setValue
+// @grant           GM_getValue
 // ==/UserScript==
 /* globals jQuery, $ */
 
 (function () {
   "use strict";
 
-  // Index for the device the content will be downloaded for
-  const device_index = 0;
   const global_log_level = "info";
 
   let startup_interval = null;
   let selected_books = [];
 
-  const button = document.createElement("div");
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
   function log(message, level = "info") {
@@ -42,32 +40,34 @@
     log("Initialized", "info");
     clearInterval(startup_interval); // Stops the startup check
 
-    add_download_button();
+    add_button('DOWNLOAD', 'Download selected', download_books);
+    add_button('DEVICE', 'Set device', prompt_device_index);
     update_event_listeners();
   }
 
-  function add_download_button() {
-    log("Adding download button", "debug");
-    let buttons_container =
-      "#FLOATING_TASK_BAR > div.filter-container > div.content-filter-item";
-    let button_style =
-      document.querySelector("#SELECT-ALL").style.cssText + "font-size: 13px;";
+  function add_button(id, innerText, callback) {
+    let button = document.createElement("div");
+    let buttons_container = "#FLOATING_TASK_BAR > div.filter-container > div.content-filter-item";
+    let button_style = document.querySelector("#SELECT-ALL").style.cssText + "font-size: 13px;";
 
     button.className = "action_button";
-    button.id = "DOWNLOAD";
-    button.innerText = "Download Selected";
+    button.id = id;
+    button.innerText = innerText;
     button.style.cssText = button_style;
     button.style.width = "auto";
     button.style.padding = "0px 5px";
-    button.style.opacity = selected_books.length > 0 ? 1.0 : 0.25;
-    button.addEventListener("click", download_books);
+
+    if (id == "DOWNLOAD") {
+      button.style.opacity = selected_books.length > 0 ? 1.0 : 0.25;
+    }
+
+    button.addEventListener("click", callback);
 
     const button_spacer = document.createElement("div");
     button_spacer.style.paddingRight = "0.8rem";
 
     document.querySelector(buttons_container).append(button_spacer);
     document.querySelector(buttons_container).append(button);
-    log("Added download button", "debug");
   }
 
   function update_event_listeners() {
@@ -104,7 +104,14 @@
       });
     }
 
-    button.style.opacity = selected_books.length > 0 ? 1.0 : 0.25;
+    document.getElementById('DOWNLOAD').style.opacity = selected_books.length > 0 ? 1.0 : 0.25;
+  }
+
+  function prompt_device_index() {
+    let device_index = prompt("Enter the index of the device to download the content (default: 0)", get_device_index());
+    if (device_index != null) {
+      set_device_index(parseInt(device_index, 10));
+    }
   }
 
   async function download_books() {
@@ -113,7 +120,9 @@
       await download(asin);
     }
   }
+
   async function download(asin) {
+    let device_index = get_device_index();
     const checkbox = document.querySelector(
       `#download_and_transfer_list_${asin}_${device_index}`
     );
@@ -144,6 +153,14 @@
         return
       }
     }
+  }
+
+  function get_device_index() {
+    return GM_getValue('device_index', 0);
+  }
+
+  function set_device_index(device_index) {
+    GM_setValue('device_index', device_index);
   }
 
   startup();
