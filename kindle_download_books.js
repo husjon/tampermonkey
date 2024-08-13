@@ -117,6 +117,12 @@
     const checkbox = document.querySelector(
       `#download_and_transfer_list_${asin}_${device_index}`
     );
+
+    if (checkbox == null) {
+      log(`Unable to download: ${asin}`);
+      return;
+    }
+
     const kindle_label = checkbox.parentElement.parentElement.parentElement;
 
     log(`Clicking Checkbox for ${kindle_label}`, "debug", "debug");
