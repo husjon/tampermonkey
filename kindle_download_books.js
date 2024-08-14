@@ -42,13 +42,23 @@
     log("Initialized", "info");
     clearInterval(startup_interval); // Stops the startup check
 
-    add_button('DOWNLOAD', 'Download selected', download_books);
+    add_download_button();
     add_device_dropdown();
     update_event_listeners();
   }
 
+  function add_download_button() {
+    const button = create_base_element("div")
+    button.id = "DOWNLOAD";
+    button.innerText = "Download selected";
+    button.style.opacity = selected_books.length > 0 ? 1.0 : 0.25;
+    button.addEventListener("click", download_books);
+    add_spacer();
+    add_element(button);
+  }
+
   function add_device_dropdown() {
-    const dropdown = create_element("select");
+    const dropdown = create_base_element("select");
     const options = get_available_devices();
 
     options.forEach((optionText, index) => {
@@ -66,20 +76,6 @@
 
     add_spacer();
     add_element(dropdown);
-  }
-
-  function add_button(id, innerText, callback) {
-    const button = create_element("div")
-    button.id = id;
-    button.innerText = innerText;
-
-    if (id == "DOWNLOAD") {
-      button.style.opacity = selected_books.length > 0 ? 1.0 : 0.25;
-    }
-
-    button.addEventListener("click", callback);
-    add_spacer();
-    add_element(button);
   }
 
   function update_event_listeners() {
@@ -160,7 +156,7 @@
     }
   }
 
-  function create_element(tagName) {
+  function create_base_element(tagName) {
     const elm = document.createElement(tagName);
     const defaultStyle = document.querySelector("#SELECT-ALL").style.cssText;
     elm.style.cssText = defaultStyle;
