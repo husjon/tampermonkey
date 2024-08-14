@@ -138,7 +138,6 @@
 
   async function download(asin) {
     let device_index = get_device_index();
-    alert(device_index);
     const checkbox = document.querySelector(
       `#download_and_transfer_list_${asin}_${device_index}`
     );
