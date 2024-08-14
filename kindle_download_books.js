@@ -23,7 +23,8 @@
   let selected_books = [];
 
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-  const buttons_container = "#FLOATING_TASK_BAR > div.filter-container > div.content-filter-item";
+  const buttons_selector = "#FLOATING_TASK_BAR > div.filter-container > div.content-filter-item";
+  const devices_selector = '[id^=download_and_transfer_list_';
 
   function log(message, level = "info") {
     if (level == global_log_level) {
@@ -33,7 +34,7 @@
 
   function startup() {
     startup_interval = setInterval(() => {
-      document.querySelector('[id^=download_and_transfer_list_') && started();
+      document.querySelector(devices_selector) && started();
     }, 100);
   }
 
@@ -118,17 +119,6 @@
     document.getElementById('DOWNLOAD').style.opacity = selected_books.length > 0 ? 1.0 : 0.25;
   }
 
-  function prompt_device_index() {
-    const devices = get_available_devices()
-      .map((str, index) => `${index}: ${str}`).join('\n');
-    const msg = `Enter index of target device. Available devices:\n\n${devices}`;
-    const device_index = prompt(msg, get_device_index());
-
-    if (device_index != null) {
-      set_device_index(parseInt(device_index, 10));
-    }
-  }
-
   async function download_books() {
     log(`Downloading: ${selected_books.join(", ")}`, "info");
     for (const asin of selected_books) {
@@ -137,7 +127,7 @@
   }
 
   async function download(asin) {
-    let device_index = get_device_index();
+    const device_index = get_device_index();
     const checkbox = document.querySelector(
       `#download_and_transfer_list_${asin}_${device_index}`
     );
@@ -184,17 +174,17 @@
   function add_spacer() {
     const spacer = document.createElement("div");
     spacer.style.paddingRight = "0.8rem";
-    document.querySelector(buttons_container).append(spacer);
+    document.querySelector(buttons_selector).append(spacer);
   }
 
   function add_element(elm) {
-    document.querySelector(buttons_container).append(elm);
+    document.querySelector(buttons_selector).append(elm);
   }
 
   function get_available_devices() {
     return Array.from(
       document
-        .querySelector('[id^=download_and_transfer_list_')
+        .querySelector(devices_selector)
         .querySelectorAll('li'))
       .map(item => item.textContent.trim());
   }
