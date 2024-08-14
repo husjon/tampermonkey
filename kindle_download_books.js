@@ -73,6 +73,7 @@
     dropdown.addEventListener('change', function (event) {
       set_device_index(event.target.selectedIndex);
     });
+    dropdown.title = "The device to which the book will be downloaded";
 
     add_spacer();
     add_element(dropdown);
