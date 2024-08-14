@@ -23,6 +23,7 @@
   let selected_books = [];
 
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  const buttons_container = "#FLOATING_TASK_BAR > div.filter-container > div.content-filter-item";
 
   function log(message, level = "info") {
     if (level == global_log_level) {
@@ -32,7 +33,7 @@
 
   function startup() {
     startup_interval = setInterval(() => {
-      document.querySelector("#CONTENT_LIST") && started();
+      document.querySelector('[id^=download_and_transfer_list_') && started();
     }, 100);
   }
 
@@ -41,33 +42,43 @@
     clearInterval(startup_interval); // Stops the startup check
 
     add_button('DOWNLOAD', 'Download selected', download_books);
-    add_button('DEVICE', 'Set device', prompt_device_index);
+    add_dropdown();
     update_event_listeners();
   }
 
-  function add_button(id, innerText, callback) {
-    let button = document.createElement("div");
-    let buttons_container = "#FLOATING_TASK_BAR > div.filter-container > div.content-filter-item";
-    let button_style = document.querySelector("#SELECT-ALL").style.cssText + "font-size: 13px;";
+  function add_dropdown() {
+    const dropdown = create_element("select");
+    const options = get_available_devices();
 
-    button.className = "action_button";
+    options.forEach((optionText, index) => {
+      const option = document.createElement('option');
+      option.value = index;
+      option.textContent = optionText;
+      dropdown.appendChild(option);
+    });
+
+    dropdown.value = get_device_index();
+    dropdown.style.textAlign = "left";
+    dropdown.addEventListener('change', function (event) {
+      set_device_index(event.target.selectedIndex);
+    });
+
+    add_spacer();
+    add_element(dropdown);
+  }
+
+  function add_button(id, innerText, callback) {
+    const button = create_element("div")
     button.id = id;
     button.innerText = innerText;
-    button.style.cssText = button_style;
-    button.style.width = "auto";
-    button.style.padding = "0px 5px";
 
     if (id == "DOWNLOAD") {
       button.style.opacity = selected_books.length > 0 ? 1.0 : 0.25;
     }
 
     button.addEventListener("click", callback);
-
-    const button_spacer = document.createElement("div");
-    button_spacer.style.paddingRight = "0.8rem";
-
-    document.querySelector(buttons_container).append(button_spacer);
-    document.querySelector(buttons_container).append(button);
+    add_spacer();
+    add_element(button);
   }
 
   function update_event_listeners() {
@@ -108,7 +119,11 @@
   }
 
   function prompt_device_index() {
-    let device_index = prompt("Enter the index of the device to download the content (default: 0)", get_device_index());
+    const devices = get_available_devices()
+      .map((str, index) => `${index}: ${str}`).join('\n');
+    const msg = `Enter index of target device. Available devices:\n\n${devices}`;
+    const device_index = prompt(msg, get_device_index());
+
     if (device_index != null) {
       set_device_index(parseInt(device_index, 10));
     }
@@ -123,6 +138,7 @@
 
   async function download(asin) {
     let device_index = get_device_index();
+    alert(device_index);
     const checkbox = document.querySelector(
       `#download_and_transfer_list_${asin}_${device_index}`
     );
@@ -153,6 +169,35 @@
         return
       }
     }
+  }
+
+  function create_element(tagName) {
+    const elm = document.createElement(tagName);
+    const defaultStyle = document.querySelector("#SELECT-ALL").style.cssText;
+    elm.style.cssText = defaultStyle;
+    elm.style.width = "auto";
+    elm.style.padding = "0px 5px";
+    elm.style.fontSize = "13px";
+    elm.className = "action_button";
+    return elm;
+  }
+
+  function add_spacer() {
+    const spacer = document.createElement("div");
+    spacer.style.paddingRight = "0.8rem";
+    document.querySelector(buttons_container).append(spacer);
+  }
+
+  function add_element(elm) {
+    document.querySelector(buttons_container).append(elm);
+  }
+
+  function get_available_devices() {
+    return Array.from(
+      document
+        .querySelector('[id^=download_and_transfer_list_')
+        .querySelectorAll('li'))
+      .map(item => item.textContent.trim());
   }
 
   function get_device_index() {
