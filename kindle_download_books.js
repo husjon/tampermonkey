@@ -170,7 +170,7 @@
   function add_spacer() {
     const spacer = document.createElement("div");
     spacer.style.paddingRight = "0.8rem";
-    document.querySelector(buttons_selector).append(spacer);
+    add_element(spacer);
   }
 
   function add_element(elm) {
