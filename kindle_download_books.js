@@ -42,11 +42,11 @@
     clearInterval(startup_interval); // Stops the startup check
 
     add_button('DOWNLOAD', 'Download selected', download_books);
-    add_dropdown();
+    add_device_dropdown();
     update_event_listeners();
   }
 
-  function add_dropdown() {
+  function add_device_dropdown() {
     const dropdown = create_element("select");
     const options = get_available_devices();
 
