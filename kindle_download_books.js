@@ -9,7 +9,8 @@
 // @supportURL      https://github.com/husjon/tampermonkey/issues/new?title=Kindle%20Download%20v0.3.3%20-%20
 // @match           https://www.amazon.com/hz/mycd/digital-console/contentlist/booksAll/dateDsc/*
 // @icon            https://www.google.com/s2/favicons?sz=64&domain=amazon.com
-// @grant           none
+// @grant           GM_setValue
+// @grant           GM_getValue
 // ==/UserScript==
 /* globals jQuery, $ */
 
@@ -21,8 +22,9 @@
   let startup_interval = null;
   let selected_books = [];
 
-  const button = document.createElement("div");
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  const buttons_selector = "#FLOATING_TASK_BAR > div.filter-container > div.content-filter-item";
+  const devices_selector = '[id^=download_and_transfer_list_';
 
   function log(message, level = "info") {
     if (level == global_log_level) {
@@ -32,7 +34,7 @@
 
   function startup() {
     startup_interval = setInterval(() => {
-      document.querySelector("#CONTENT_LIST") && started();
+      document.querySelector(devices_selector) && started();
     }, 100);
   }
 
@@ -41,31 +43,40 @@
     clearInterval(startup_interval); // Stops the startup check
 
     add_download_button();
+    add_device_dropdown();
     update_event_listeners();
   }
 
   function add_download_button() {
-    log("Adding download button", "debug");
-    let buttons_container =
-      "#FLOATING_TASK_BAR > div.filter-container > div.content-filter-item";
-    let button_style =
-      document.querySelector("#SELECT-ALL").style.cssText + "font-size: 13px;";
-
-    button.className = "action_button";
+    const button = create_base_element("div")
     button.id = "DOWNLOAD";
-    button.innerText = "Download Selected";
-    button.style.cssText = button_style;
-    button.style.width = "auto";
-    button.style.padding = "0px 5px";
+    button.innerText = "Download selected";
     button.style.opacity = selected_books.length > 0 ? 1.0 : 0.25;
     button.addEventListener("click", download_books);
+    add_spacer();
+    add_element(button);
+  }
 
-    const button_spacer = document.createElement("div");
-    button_spacer.style.paddingRight = "0.8rem";
+  function add_device_dropdown() {
+    const dropdown = create_base_element("select");
+    const options = get_available_devices();
 
-    document.querySelector(buttons_container).append(button_spacer);
-    document.querySelector(buttons_container).append(button);
-    log("Added download button", "debug");
+    options.forEach((optionText, index) => {
+      const option = document.createElement('option');
+      option.value = index;
+      option.textContent = optionText;
+      dropdown.appendChild(option);
+    });
+
+    dropdown.value = get_device_index();
+    dropdown.style.textAlign = "left";
+    dropdown.addEventListener('change', function (event) {
+      set_device_index(event.target.selectedIndex);
+    });
+    dropdown.title = "The device to which the book will be downloaded";
+
+    add_spacer();
+    add_element(dropdown);
   }
 
   function update_event_listeners() {
@@ -102,7 +113,7 @@
       });
     }
 
-    button.style.opacity = selected_books.length > 0 ? 1.0 : 0.25;
+    document.getElementById('DOWNLOAD').style.opacity = selected_books.length > 0 ? 1.0 : 0.25;
   }
 
   async function download_books() {
@@ -111,14 +122,22 @@
       await download(asin);
     }
   }
+
   async function download(asin) {
+    const device_index = get_device_index();
     const checkbox = document.querySelector(
-      `#download_and_transfer_list_${asin}_0`
+      `#download_and_transfer_list_${asin}_${device_index}`
     );
+
+    if (checkbox == null) {
+      log(`Unable to download: ${asin}`);
+      return;
+    }
+
     const kindle_label = checkbox.parentElement.parentElement.parentElement;
 
     log(`Clicking Checkbox for ${kindle_label}`, "debug", "debug");
-    document.querySelector(`#download_and_transfer_list_${asin}_0`).click();
+    document.querySelector(`#download_and_transfer_list_${asin}_${device_index}`).click();
     await sleep(100);
 
     log(`Clicking Confirm:  ${confirm}`, "debug");
@@ -136,6 +155,43 @@
         return
       }
     }
+  }
+
+  function create_base_element(tagName) {
+    const elm = document.createElement(tagName);
+    const defaultStyle = document.querySelector("#SELECT-ALL").style.cssText;
+    elm.style.cssText = defaultStyle;
+    elm.style.width = "auto";
+    elm.style.padding = "0px 5px";
+    elm.style.fontSize = "13px";
+    elm.className = "action_button";
+    return elm;
+  }
+
+  function add_spacer() {
+    const spacer = document.createElement("div");
+    spacer.style.paddingRight = "0.8rem";
+    add_element(spacer);
+  }
+
+  function add_element(elm) {
+    document.querySelector(buttons_selector).append(elm);
+  }
+
+  function get_available_devices() {
+    return Array.from(
+      document
+        .querySelector(devices_selector)
+        .querySelectorAll('li'))
+      .map(item => item.textContent.trim());
+  }
+
+  function get_device_index() {
+    return GM_getValue('device_index', 0);
+  }
+
+  function set_device_index(device_index) {
+    GM_setValue('device_index', device_index);
   }
 
   startup();
