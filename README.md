@@ -16,7 +16,8 @@ A collection of tampermonkey scripts I've made / use for different things.
 
 ## Different Userscripts
 ### [kindle_download_books](./kindle_download_books.js)  
-  **Note**: Since Amazon removing the support for downloading the books, this script will stop working on **February 26th 2025**.
+  * **Note**: Since Amazon removing the support for downloading the books, this script will stop working on **February 26th 2025**.  
+  * **2025.feb.23** Amazon really do not want you to get your books, I unfortunately do not have the time nor energy to fix it within the deadline (see [#11](https://github.com/husjon/tampermonkey/issues/11)).
   
   Simple helper script to assist the user in backing up their Kindle Books.  
   Write-up: https://husjon.github.io/Amazon-Kindle-Download-Helper   
